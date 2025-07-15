@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """
-Script interactivo Día 2 – Hola Mundo vibe-codificado
+Día 3 – Script interactivo refactorizado.
 
-- Solicita nombre y edad al usuario.
-- Calcula el año en que cumplirá 100 años.
-- Maneja errores si la edad no es un número positivo.
-
-Uso:
-    python3 src/dia2_hola_mundo.py
+• La entrada/salida (input / print) está separada de la lógica de cálculo.
+• Cada función incluye un docstring corto.
+• Todos los mensajes usan f-strings.
 """
 
 from datetime import datetime
@@ -15,35 +12,57 @@ from datetime import datetime
 CURRENT_YEAR = datetime.now().year
 
 
-def pedir_datos() -> tuple[str, int]:
-    """Pregunta nombre y edad; valida que edad sea un entero positivo."""
-    nombre = input("¿Cómo te llamas? ").strip()
+# ──────────────────────────────────────────────────────────────────────
+# Funciones de entrada
+# ──────────────────────────────────────────────────────────────────────
+def pedir_nombre() -> str:
+    """Pregunta el nombre y lo devuelve sin espacios extra."""
+    return input("¿Cómo te llamas? ").strip()
 
+
+def pedir_edad() -> int:
+    """Pregunta la edad y valida que sea un número entero positivo."""
     while True:
         edad_str = input("¿Cuántos años tienes? ").strip()
         try:
             edad = int(edad_str)
             if edad <= 0:
                 raise ValueError
-            return nombre, edad
+            return edad
         except ValueError:
-            print("❌  Por favor introduce un número entero positivo para la edad.")
+            print("❌  Introduce un número entero positivo para la edad.")
 
 
-def calcular_anio_cien(edad_actual: int) -> int:
+# ──────────────────────────────────────────────────────────────────────
+# Lógica de negocio (cálculo)
+# ──────────────────────────────────────────────────────────────────────
+def calcular_anio_cien(edad: int, anio_actual: int = CURRENT_YEAR) -> int:
     """Devuelve el año en que el usuario cumplirá 100 años."""
-    return CURRENT_YEAR + (100 - edad_actual)
+    return anio_actual + (100 - edad)
 
 
-def main() -> None:
-    nombre, edad = pedir_datos()
-    anio_cien = calcular_anio_cien(edad)
-
-    print(
+# ──────────────────────────────────────────────────────────────────────
+# Funciones de salida
+# ──────────────────────────────────────────────────────────────────────
+def construir_mensaje(nombre: str, anio_cien: int) -> str:
+    """Crea el mensaje final para el usuario."""
+    return (
         f"\n👋 ¡Hola, {nombre}!\n"
         f"En el año {anio_cien} cumplirás 100 años.\n"
         "¡Sigue vibe-codeando! 🚀"
     )
+
+
+# ──────────────────────────────────────────────────────────────────────
+# Orquestador
+# ──────────────────────────────────────────────────────────────────────
+def main() -> None:
+    """Flujo principal del programa."""
+    nombre = pedir_nombre()
+    edad = pedir_edad()
+    anio_cien = calcular_anio_cien(edad)
+    mensaje = construir_mensaje(nombre, anio_cien)
+    print(mensaje)
 
 
 if __name__ == "__main__":
